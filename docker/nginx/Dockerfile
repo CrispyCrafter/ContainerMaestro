@@ -3,9 +3,10 @@ FROM nginx:1.13-alpine
 MAINTAINER BP GREYLING
 
 RUN apk add --no-cache openssl
+ARG NGINX_CONF=nginx.conf
 
 # Setup NGINX configfiles
-COPY nginx.conf             /etc/nginx/nginx.conf
+COPY $NGINX_CONF            /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf  /etc/nginx/conf.d/default.conf
 COPY uwsgi_params.conf      /etc/nginx/uwsgi/uwsgi_params.conf
 COPY ssl-params.conf        /etc/nginx/snippets/ssl-params.conf

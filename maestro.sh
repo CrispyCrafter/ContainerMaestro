@@ -95,7 +95,7 @@ while true; do
 		update;
 		echo "Building docker image" ;
 		docker build -t ${IMAGE_NAME}  . -f docker/django/Dockerfile;
-    docker build -t ${IMAGE_NGINX} ./docker/nginx/ -f docker/nginx/Dockerfile;
+    docker build -t ${IMAGE_NGINX} ./docker/nginx/ -f docker/nginx/Dockerfile --build-arg NGINX_CONF=nginx_google.conf;
 		echo "Pushing docker image to cloud" ;
 		gcloud docker -- push ${IMAGE_NAME} ;
     gcloud docker -- push ${IMAGE_NGINX};

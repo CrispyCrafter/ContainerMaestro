@@ -24,12 +24,15 @@ metadata:
         app: "{deployment}"
 spec:
     ports:
-    - name: "443-to-443-tcp"
-        protocol: "TCP"
-        port: 443
-    - name: "80-to-80-tcp"
-        protocol: "TCP"
-        port: 80
+        - name: "443-to-443-tcp"
+            protocol: "TCP"
+            port: 443
+        - name: "80-to-80-tcp"
+            protocol: "TCP"
+            port: 80
+        - name: "nginx_debug"
+            protocol: "TCP"
+            port: 8090
     selector:
         app: "{deployment}"
     type: "LoadBalancer"

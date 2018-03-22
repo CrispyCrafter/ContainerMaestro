@@ -17,16 +17,13 @@ usage: ./maestro.sh [OPTIONS]
 ```
 ---
 ## Requirements:
-Python 3.x.x
-
-[Google cloud SDK](https://cloud.google.com/sdk/)
-
-[Docker](https://www.docker.com/get-docker)
-
-[Kubernetes command-line tool](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* Python 3.x.x
+* [Google cloud SDK](https://cloud.google.com/sdk/)
+* [Docker](https://www.docker.com/get-docker)
+* [Kubernetes command-line tool](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 *Platform specific requirements*
-- MAC-OSX
+* MAC-OSX
 _get-opt_ : ```brew install gnu-getopt```
 
 ## Local development:
@@ -57,36 +54,31 @@ This will create:
  3) Create Database authentication keys
  4) Deploy test Django app to Kubernetes cluster
 
- Be sure to also [expose](https://console.cloud.google.com/kubernetes/discovery) the deployment to a desired port on the kubernetes engine in google cloud console  
 
-### Usage:
+### Usage (init):
 For Google cloud functionality complete the following set of guidelines, making note of the listed environment variables.
 
 1) Setting up Kubernetes with Google cloud:
 
-⋅⋅⋅ https://cloud.google.com/kubernetes-engine/docs/quickstart
+ https://cloud.google.com/kubernetes-engine/docs/quickstart
 
-⋅⋅⋅ PROJECT_ID
-
-⋅⋅⋅ COMPUTE_ZONE
-
-⋅⋅⋅ CLUSTER_NAME
+|Environment Variable | importance |
+| ------------------  | ---------  |
+|PROJECT_ID           |  required  |
+|COMPUTE_ZONE         |  required  |
+|CLUSTER_NAME         |  reqiured  |
 
 2) Setting up MySQL with Docker:
 
-⋅⋅⋅ https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine
+ https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine
 
-⋅⋅⋅ Be sure to make note of the following environment variables:
+|Environment Variable     | importance |
+| ------------------      | ---------  |
+|PROXY_KEY_FILE_PATH      |  required  |
+|INSTANCE_CONNECTION_NAME |  required  |
+|DB_PASSWORD              |  reqiured  |
+|DB_NAME                  |  required  |
 
-⋅⋅⋅ PROXY_KEY_FILE_PATH
-
-⋅⋅⋅ INSTANCE_CONNECTION_NAME
-
-⋅⋅⋅ DB_PASSWORD
-
-3) Create a database on Cloud MySQL and note the database name as:
-
-⋅⋅⋅DB_NAME
 
 Initialize global environment variables:
 ```
@@ -100,6 +92,9 @@ env
 └── gcloudENVs
 
 k8s
-└── kubectl-deployment.yml
+├── main-services.yml
+└── main-deployment.yml
 ```
-When prompted insert environment variables detailed in A
+### To-Do:
+1) Implement Postgres instead of MySQL
+2) Pythonise maestro from BASH
