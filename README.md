@@ -66,11 +66,12 @@ Initialize global environment variables:
 
 This will create the following files:
 ```
-pod
+env
 ├── dockerENVs
-├── gcloudENVs
-├── kubectl-deployment.yaml
-└── single_pod.yaml
+└── gcloudENVs
+
+k8s
+└── kubectl-deployment.yml
 ```
 When prompted insert environment variables detailed in A
 
