@@ -1,4 +1,4 @@
-## ContainerMaestro
+# ContainerMaestro
 
 A streamlined dev pipeline for local container debugging and google cloud deployment.
 
@@ -16,7 +16,7 @@ usage: ./maestro.sh [OPTIONS]
         -t --terminate  - Terminate all instances
 ```
 ---
-### Requirements:
+## Requirements:
 Python 3.x.x
 
 [Google cloud SDK](https://cloud.google.com/sdk/)
@@ -29,7 +29,36 @@ Python 3.x.x
 - MAC-OSX
 _get-opt_ : ```brew install gnu-getopt```
 
------
+## Local development:
+For local development run:
+```
+./maestro.sh --local
+```
+This will create:
+
+ | Instance      |      Type     |  Address                      |
+ | ------------- |:-------------:| -----------------------------:|
+ | MySQL         | server        | 127.0.0.1:3306                |
+ | NGINX         | server/debug  | 127.0.0.1:8090/nginx_status   |
+ | phpmyadmin    | server        | 127.0.0.1:8082                |
+ | Django        | app           | 127.0.0.1:80                  |
+ | Django        | app           | 127.0.0.1:443                 |
+
+
+ ## Cloud deployment:
+
+ For cloud deployment run:
+ ```
+ ./maestro.sh -icpkd
+ ```
+ This will:
+ 1) Create cloud compute instance (See maestro.sh for fine tuning )
+ 2) Build and push local Docker image to a Google cloud bucket
+ 3) Create Database authentication keys
+ 4) Deploy test Django app to Kubernetes cluster
+
+ Be sure to also [expose](https://console.cloud.google.com/kubernetes/discovery) the deployment to a desired port on the kubernetes engine in google cloud console  
+
 ### Usage:
 For Google cloud functionality complete the following set of guidelines, making note of the listed environment variables.
 
@@ -74,27 +103,3 @@ k8s
 └── kubectl-deployment.yml
 ```
 When prompted insert environment variables detailed in A
-
-----
-### Local development:
-For local development run:
-```
-./maestro.sh --local
-```
-This will create:
-1) MySQL      - server running at 127.0.0.1:3306
-2) phpmyadmin - server running at 127.0.0.1:8082
-3) Local test Django app - running at 127.0.0.1:80
-
-### Cloud deployment:
-For cloud deployment run:
-```
-./maestro.sh -icpkd
-```
-This will:
-1) Create cloud compute instance (See maestro.sh for fine tuning )
-2) Build and push local Docker image to a Google cloud bucket
-3) Create Database authentication keys
-4) Deploy test Django app to Kubernetes cluster
-
-Be sure to also [expose](https://console.cloud.google.com/kubernetes/discovery) the deployment to a desired port on the kubernetes engine in google cloud console  

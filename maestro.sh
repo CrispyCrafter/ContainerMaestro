@@ -110,7 +110,7 @@ while true; do
 		echo "Updating build yaml"
 		source env/gcloudENVs;
 		python3 scripts/PyYaml.py;
-		kubectl apply -f $PROJECT_DIR/k8s/kubectl-deployment.yaml;
+		kubectl apply -f $PROJECT_DIR/k8s/kubectl-deployment.yml;
 		kubectl get pods;
 		shift;
 	;;

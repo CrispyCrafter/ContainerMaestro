@@ -37,7 +37,7 @@ spec:
           name: cloudsql-db-credentials
           key: password"""
 
-    with open('k8s/single_pod.yaml'.format(cdir), 'w') as yfile:
+    with open('k8s/single_pod.yml'.format(cdir), 'w') as yfile:
         print("Writing file")
         yfile.write(template.format(**kwargs))
 
@@ -89,7 +89,7 @@ spec:
         - name: cloudsql
           emptyDir:"""
 
-    with open('k8s/kubectl-deployment.yaml', 'w') as yfile:
+    with open('k8s/kubectl-deployment.yml', 'w') as yfile:
         yfile.write(template.format(**kwargs))
 
 # usage:
