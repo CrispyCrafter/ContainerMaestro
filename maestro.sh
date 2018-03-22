@@ -94,9 +94,11 @@ while true; do
 	-p | --push )
 		update;
 		echo "Building docker image" ;
-		docker build -t ${IMAGE_NAME} . -f docker/django/Dockerfile;
+		docker build -t ${IMAGE_NAME}  . -f docker/django/Dockerfile;
+    docker build -t ${IMAGE_NGINX} ./docker/nginx/ -f docker/nginx/Dockerfile;
 		echo "Pushing docker image to cloud" ;
 		gcloud docker -- push ${IMAGE_NAME} ;
+    gcloud docker -- push ${IMAGE_NGINX};
 		shift
 	;;
 	-k | --keys )
@@ -110,7 +112,8 @@ while true; do
 		echo "Updating build yaml"
 		source env/gcloudENVs;
 		python3 scripts/PyYaml.py;
-		kubectl apply -f $PROJECT_DIR/k8s/kubectl-deployment.yml;
+		kubectl apply -f $PROJECT_DIR/k8s/main-deployment.yml;
+    kubectl apply -f $PROJECT_DIR/k8s/main-services.yml
 		kubectl get pods;
 		shift;
 	;;

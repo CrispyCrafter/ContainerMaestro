@@ -10,7 +10,7 @@ enVARS = {
         'DB_PASSWORD'  :  os.environ['DB_PASSWORD'],
         'DB_NAME'      :  os.environ['DB_NAME'],
         'INSTANCE_CONNECTION_NAME' : os.environ['INSTANCE_CONNECTION_NAME'],
-        'PROXY_KEY_FILE_PATH' :  os.path.join(os.environ['PROJECT_DIR']+'/env/',
+        'PROXY_KEY_FILE_PATH' :  os.path.join(os.environ['PROJECT_DIR']+'/k8s/',
                                               os.environ['PROXY_KEY_FILE_PATH'].split("/")[-1]),
         }
 
@@ -33,6 +33,7 @@ export CLUSTER_NAME={CLUSTER_NAME}
 export APP_NAME={APP_NAME}
 export APP_VERSION={APP_VERSION}
 export IMAGE_NAME=gcr.io/{PROJECT_ID}/{APP_NAME}:{APP_VERSION}
+export IMAGE_NGINX=gcr.io/{PROJECT_ID}/nginx:{APP_VERSION}
 export DEPLOYMENT={APP_NAME}deployment
 
 # Specify database info

@@ -25,7 +25,7 @@ SECRET_KEY = '_4+2=gmasadp=q0stel$5#1btx=qll49vx6ttbicht7%r$-dz1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','35.189.86.80']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','35.189.94.35']
 
 # Application definition
 
@@ -115,4 +115,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = "http://storage.googleapis.com/djangodeployment/static/" 
+STATIC_URL = "http://storage.googleapis.com/djangodeployment/static/"

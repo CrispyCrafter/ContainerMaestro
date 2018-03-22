@@ -1,47 +1,45 @@
 import os
-name  = os.environ["APP_NAME"]+"deployment"
-app_name = os.environ["APP_NAME"]
-#image = os.environ["IMAGE_NAME"].split(":")[0] + ":latest"
-image = os.environ["IMAGE_NAME"]
-cdir  = os.environ["PROJECT_DIR"]
-dbinstance = os.environ["INSTANCE_CONNECTION_NAME"]
+enVARS = {
+    "name"        : os.environ["APP_NAME"]+"deployment",
+    "app_name"    : os.environ["APP_NAME"],
+    "app_image"   : os.environ["IMAGE_NAME"],
+    "nginx_image" : os.environ["IMAGE_NGINX"],
+    "cdir"        : os.environ["PROJECT_DIR"],
+    "dbinstance"  : os.environ["INSTANCE_CONNECTION_NAME"],
+    "deployment"  : os.environ["DEPLOYMENT"]
+}
 
 print("Generating YAML file with parameters:")
-print("name : {}".format(name))
-print("image: {}".format(image))
-print("dir  : {}".format(cdir))
+print("name : {}".format(enVARS["name"]))
+print("image: {}".format(enVARS["app_image"]))
+print("dir  : {}".format(enVARS["cdir"]))
 
-def writeScrapyYAML(cdir,**kwargs):
-    template ="""apiVersion: v1
-kind: Pod
+def writeServicesYAML(**kwargs):
+    template ="""apiVersion: "v1"
+kind: "Service"
 metadata:
-  name: {name}
-  labels:
-    app: {name}
+    name: "{deployment}-service"
+    namespace: "default"
+    labels:
+        app: "{deployment}"
 spec:
-  containers:
-  - name: {app_name}
-    image: {image}
-    imagePullPolicy: Always
-    env:
-    - name: DB_HOST
-      value: 127.0.0.1
-    - name: DB_USER
-      valueFrom:
-        secretKeyRef:
-          name: cloudsql-db-credentials
-          key: username
-    - name: DB_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: cloudsql-db-credentials
-          key: password"""
+    ports:
+    - name: "443-to-443-tcp"
+        protocol: "TCP"
+        port: 443
+    - name: "80-to-80-tcp"
+        protocol: "TCP"
+        port: 80
+    selector:
+        app: "{deployment}"
+    type: "LoadBalancer"
+    loadBalancerIP: """
 
-    with open('k8s/single_pod.yml'.format(cdir), 'w') as yfile:
+    with open('k8s/main-services.yml', 'w') as yfile:
         print("Writing file")
         yfile.write(template.format(**kwargs))
 
-def writeDeploymentYAML(cdir,**kwargs):
+def writeDeploymentYAML(**kwargs):
     template ="""apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -56,7 +54,7 @@ spec:
     spec:
       containers:
         - name: {app_name}
-          image: {image}
+          image: {app_image}
           imagePullPolicy: Always
           env:
             - name: DB_HOST
@@ -71,6 +69,8 @@ spec:
                 secretKeyRef:
                   name: cloudsql-db-credentials
                   key: password
+          ports:
+            - containerPort: 8081
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
           command: ["/cloud_sql_proxy",
@@ -80,6 +80,13 @@ spec:
             - name: cloudsql-instance-credentials
               mountPath: /secrets/cloudsql
               readOnly: false
+        - name: nginx
+          image: {nginx_image}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 8090
         # [END proxy_container]
       # [START volumes]
       volumes:
@@ -89,9 +96,8 @@ spec:
         - name: cloudsql
           emptyDir:"""
 
-    with open('k8s/kubectl-deployment.yml', 'w') as yfile:
+    with open('k8s/main-deployment.yml', 'w') as yfile:
         yfile.write(template.format(**kwargs))
 
-# usage:
-#writeScrapyYAML(cdir,app_name=app_name,image=image,name=name)
-writeDeploymentYAML(cdir,app_name=app_name,image=image,name=name,dbinstance=dbinstance)
+writeServicesYAML(**enVARS)
+writeDeploymentYAML(**enVARS)
