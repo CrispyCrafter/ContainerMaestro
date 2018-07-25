@@ -16,6 +16,8 @@ ENV DOCKYARD_SRVHOME=/srv
 # Directory in container for project source files
 ENV DOCKYARD_SRVPROJ=$DOCKYARD_SRVHOME/$DOCKYARD_SRC
 
+RUN pip3 install --upgrade pip
+
 RUN /entrypoint.sh \
 	-a git \
 	-a mariadb-client-libs \
@@ -24,12 +26,18 @@ RUN /entrypoint.sh \
 	-a libxml2-dev \
 	-a libxslt-dev \
 	-a jpeg-dev \
-  	-a zlib-dev \
+  -a zlib-dev \
 	-a supervisor \
+	-a py-setuptools \
+	-a libffi \
+	-a libffi-dev \
+	-a openssl \
+	-a openssl-dev \
 	-p uwsgi \
 	-p django \
 	-p pymysql \
-	-p pillow
+	-p pillow \
+	-p wagtail
 
 # setup all the configfiles
 COPY docker/django/supervisor-app.conf	/etc/supervisor/conf.d/
